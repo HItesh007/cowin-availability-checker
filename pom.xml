@@ -32,6 +32,7 @@
         <restassured.version>4.3.3</restassured.version>
         <underscore.version>1.66</underscore.version>
         <freemarker.version>2.3.31</freemarker.version>
+        <simple.java.mail.version>6.5.2</simple.java.mail.version>
     </properties>
 
     <dependencies>
@@ -178,7 +179,7 @@
         <dependency>
             <groupId>org.simplejavamail</groupId>
             <artifactId>simple-java-mail</artifactId>
-            <version>6.5.2</version>
+            <version>${simple.java.mail.version}</version>
         </dependency>
 
     </dependencies>
