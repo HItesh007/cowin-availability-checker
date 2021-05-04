@@ -8,15 +8,16 @@ import com.hitesh.cowin.freemarker.model.VaccinationCenterModel;
 import com.hitesh.cowin.json.JSONObject;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.List;
 
 public class AppointmentAvailabilityTests {
 
-
-    public static void main(String[] args) throws IOException {
-        String pincodeToSearchWith = System.getProperty("postalcode");
+    @Test(alwaysRun = true)
+    public void checkSlotAvailabilityFor18Plus() throws IOException {
+        String pincodeToSearchWith = System.getProperty("pincode");
         System.out.println("Pincode : " + pincodeToSearchWith);
 
         if (!StringUtils.isBlank(pincodeToSearchWith)) {
