@@ -27,26 +27,36 @@ public class AppointmentAvailabilityTests {
                     .getVaccinationSessionByPinFor7DaysFromToday(Integer.parseInt(pincodeToSearchWith));
 
             System.out.println("\n---------------------- ORIGINAL JSON ------------------------");
-            System.out.println(response.asString());
 
-            System.out.println("\n---------------------- FILTERED JSON BASED ON AVAILABILITY ------------------------");
-            JSONObject filteredJsonObject = appointmentAvailability.filterResponseByAvailability(response);
-            System.out.println(filteredJsonObject);
+            try {
+                JSONObject jsonObject = new JSONObject(response.asString());
+                System.out.println(jsonObject);
 
-            System.out.println("\n---------------------- AVAILABLE SLOT LIST BY AGE  ------------------------");
-            JSONObject filteredObject = appointmentAvailability.filterResponseByAvailabilityAndByAge(response, 18, 44);
-            System.out.println(filteredObject.toString());
+                System.out.println("\n---------------------- FILTERED JSON BASED ON AVAILABILITY ------------------------");
+                JSONObject filteredJsonObject = appointmentAvailability.filterResponseByAvailability(response);
+                System.out.println(filteredJsonObject);
 
-            if (!filteredObject.getJSONArray("centers").isEmpty()) {
-                List<VaccinationCenterModel> model = ResponseToModelTransformer.convertToVaccinationCenterModel(filteredObject);
+                System.out.println("\n---------------------- AVAILABLE SLOT LIST BY AGE  ------------------------");
+                JSONObject filteredObject = appointmentAvailability.filterResponseByAvailabilityAndByAge(response, 18, 44);
+                System.out.println(filteredObject.toString());
 
-                System.out.println(model);
+                if (!filteredObject.getJSONArray("centers").isEmpty()) {
+                    List<VaccinationCenterModel> model = ResponseToModelTransformer.convertToVaccinationCenterModel(filteredObject);
 
-                String emailTemplateAsHtml = EmailGenerator.generateEmailTemplate(filteredObject);
+                    System.out.println(filteredJsonObject.toString(2));
 
-                EmailHelper.emailReport(emailTemplateAsHtml);
-            } else {
-                System.out.println("\n\nNo available slots found for age 18-44.");
+                    String emailTemplateAsHtml = EmailGenerator.generateEmailTemplate(filteredObject);
+
+                    EmailHelper.emailReport(emailTemplateAsHtml);
+                } else {
+                    System.out.println("\n\nNo available slots found for age 18-44.");
+                }
+            } catch (Exception tEx) {
+                System.out.println("\n\n************************** RESPONSE IS NOT OF TYPE JSON **************************\n");
+                System.out.println("----------------------------- Response Received from API -----------------------------");
+                System.out.println(response.asString());
+                System.out.println("\n**************************** FIND STACKTRACE BELOW *******************************\n");
+                tEx.printStackTrace();
             }
         }
     }
